@@ -1597,9 +1597,11 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
                 var2.remove("v(");
                 var2.remove("i(");
                 var2.remove(")");
+                // sweep dependencies, inner sweep first (same order as the values)
+                QString swp_deps = swp_var;
+                if (hasDblParSweep) swp_deps += " " + swp_var2;
                 if (hasParSweep) {
-                  var2 += " " + swp_var;
-                  if (hasDblParSweep) var += " " + swp_var2;
+                  var2 += " " + swp_deps;
                 }
                 if (var_list.contains(var2)) {
                   // it is digtial variable
@@ -1607,9 +1609,9 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
                 } else {
                   // it is scalar
                   if (hasParSweep) {
-                    ds_stream<<QStringLiteral("<dep %1 %2>\n").arg(var, swp_var);
+                    ds_stream<<QStringLiteral("<dep %1 %2>\n").arg(var, swp_deps);
                   } else {
-                    ds_stream<<QStringLiteral("<indep %1 %2>\n").arg(var, var_length);
+                    ds_stream<<QStringLiteral("<indep %1 %2>\n").arg(var).arg(var_length);
                     is_scalar = true;
                   }
                 }
@@ -1629,7 +1631,9 @@ void AbstractSpiceKernel::convertToQucsData(const QString &qucs_dataset)
                   if (hasParSweep) {
                     if (count >= var_length) {
                       // forward variables with dim= suffix
-                      int indep_cnt = sim_points.count()/swp_var_val.count();
+                      int steps = swp_var_val.count();
+                      if (hasDblParSweep) steps *= swp_var2_val.count();
+                      int indep_cnt = sim_points.count()/steps;
                       idx = idx + (indep_cnt - var_length - 1);
                       count = 0;
                       continue;
