@@ -19,7 +19,7 @@
 
 #include <QFontInfo>
 #include <QFontMetrics>
-#include <QRegularExpression>
+#include "extsimkernels/spicecompat.h"
 
 NutmegEquation::NutmegEquation()
 {
@@ -77,14 +77,7 @@ QString NutmegEquation::getEquations(QString sim, QStringList &dep_vars)
     if (isActive != COMP_IS_ACTIVE) return QString();
 
     QString s;
-    QRegularExpression sim_rx("^\\w+\\d+");
-    QString used_sim =  Props.at(0)->Value.toLower();
-    bool match = false;
-    if ( sim_rx.match(used_sim).hasMatch() )
-        match = sim == used_sim;
-    else
-        match = sim.startsWith(used_sim);
-    if ( match || used_sim == "all" ) {
+    if ( spicecompat::simulationMatches(Props.at(0)->Value, sim) ) {
         auto pp = Props.begin();
         pp++;
         for ( ; pp != Props.end() ; ++pp) {

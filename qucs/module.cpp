@@ -556,6 +556,7 @@ void Module::registerModules (void) {
       REGISTER_SIMULATION_1 (Optimize_Sim);
   //if (QucsSettings.DefaultSimulator != spicecompat::simQucsator) {
       REGISTER_SIMULATION_1 (SpiceFourier);
+      REGISTER_SIMULATION_1 (SpiceMeas);
       REGISTER_SIMULATION_1 (SpiceNoise);
   //}
   //if (QucsSettings.DefaultSimulator == spicecompat::simNgspice || QucsSettings.DefaultSimulator == spicecompat::simSpiceOpus) {

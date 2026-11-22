@@ -59,6 +59,7 @@ MOS_SPICE.cpp
 
 sp_customsim.cpp
 sp_fourier.cpp
+sp_meas.cpp
 sp_disto.cpp
 sp_noise.cpp
 sp_pz.cpp
@@ -151,6 +152,7 @@ PMOS_SPICE.h
 MOS_SPICE.h
 sp_customsim.h
 sp_fourier.h
+sp_meas.h
 sp_disto.h
 sp_noise.h
 sp_pz.h

@@ -21,6 +21,7 @@
 #include "components/param_sweep.h"
 #include "components/subcircuit.h"
 #include "spicecomponents/sp_spiceinit.h"
+#include "spicecomponents/sp_meas.h"
 #include "main.h"
 #include "misc.h"
 #include "qucs.h"
@@ -307,6 +308,13 @@ void Ngspice::createNetlist(
 
         if (netlist_equations) {
             QStringList dep_vars;
+            // Measurements first, so that equations can use their results
+            const QString meas_analysis = SpiceMeas::analysisType(sim_typ);
+            for (Component* pc1 : a_schematic->a_DocComps) {
+                if ( pc1->Model == ".MEAS" )
+                    spiceNetlist.append(static_cast<SpiceMeas*>(pc1)->getMeasurements(
+                        sim_name, meas_analysis, dep_vars));
+            }
             for (Component* pc1 : a_schematic->a_DocComps) {
                 if ( pc1->isActive != COMP_IS_ACTIVE ) continue;
                 if ( pc1->Model == "Eqn" || pc1->Model == "NutmegEq" )

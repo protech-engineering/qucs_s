@@ -288,7 +288,7 @@ QVector<ValidationIssue> SchematicValidator::checkMissingSimulation() const
 
   // Dependent simulations have no effect without another attached simulation
   static const QStringList depSimulationsModels = {
-      ".SW", ".MC"
+      ".SW", ".MC", ".MEAS"
   };
 
   for (Component *component : sch->a_DocComps) {
