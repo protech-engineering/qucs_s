@@ -568,7 +568,15 @@ ComponentDialog::ComponentDialog(Component* schematicComponent, Schematic* schem
       sweepTypeSpecialLabels[qMakePair(QString("log"),QString("Step"))] = "Points per decade";
 
       // Setup the widgets as per the stored type.
-      sweepParamWidget["Sim"]->setOptions(getSimulationList(false));
+      QStringList sweepSimOptions = getSimulationList(false);
+      if (component->Model == ".SW" && component->getSchematic()) {
+        // A parameter sweep can also sweep another parameter sweep (nested sweeps)
+        for (Component* c : component->getSchematic()->a_DocComps) {
+          if (c->Model == ".SW" && c != component && !sweepSimOptions.contains(c->Name))
+            sweepSimOptions.append(c->Name);
+        }
+      }
+      sweepParamWidget["Sim"]->setOptions(sweepSimOptions);
       if (QucsSettings.DefaultSimulator == spicecompat::simNgspice ||
           QucsSettings.DefaultSimulator == spicecompat::simXyce) {
         if (component->Model != ".SW" &&
