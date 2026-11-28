@@ -308,16 +308,15 @@ void Ngspice::createNetlist(
 
         if (netlist_equations) {
             QStringList dep_vars;
-            // Measurements first, so that equations can use their results
+            // Measurements and equations share one stream, in schematic order,
+            // so that each one can use the results of those written before it
             const QString meas_analysis = SpiceMeas::analysisType(sim_typ);
             for (Component* pc1 : a_schematic->a_DocComps) {
+                if ( pc1->isActive != COMP_IS_ACTIVE ) continue;
                 if ( pc1->Model == ".MEAS" )
                     spiceNetlist.append(static_cast<SpiceMeas*>(pc1)->getMeasurements(
                         sim_name, meas_analysis, dep_vars));
-            }
-            for (Component* pc1 : a_schematic->a_DocComps) {
-                if ( pc1->isActive != COMP_IS_ACTIVE ) continue;
-                if ( pc1->Model == "Eqn" || pc1->Model == "NutmegEq" )
+                else if ( pc1->Model == "Eqn" || pc1->Model == "NutmegEq" )
                     spiceNetlist.append(pc1->getEquations(sim_name, dep_vars));
             }
             if (write_dep_vars) {
