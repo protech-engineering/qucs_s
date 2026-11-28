@@ -355,7 +355,7 @@ ComponentDialog::ComponentDialog(Component* schematicComponent, Schematic* schem
   componentNameWidget->setCheck(component->showName);
 
   // Try to work out what kind of component this is.
-  isEquation = QStringList({"Eqn", "NutmegEq", "SpiceIC", "SpicePar", "SpiceOptions", "SpiceFunc", "SpiceCSPar", "SpGlobPar",
+  isEquation = QStringList({"Eqn", "NutmegEq", ".MEAS", "SpiceIC", "SpicePar", "SpiceOptions", "SpiceFunc", "SpiceCSPar", "SpGlobPar",
                             "SpiceNodeset"}).contains(component->Model);
   isPlainText = QStringList({"CMD"}).contains(component->Model);
   hasSweep = QStringList({".AC", ".DISTO", ".NOISE", ".SW", ".SP", ".TR"}).contains(component->Model);
@@ -367,7 +367,7 @@ ComponentDialog::ComponentDialog(Component* schematicComponent, Schematic* schem
   // for a given simulation type. Then only create the valid widgets fo
   // sweepParams[".AC"] = QStringList({"Type", "Start", "Stop", "Points"});
 
-  paramsHiddenBySim["Export"] = QStringList{"NutmegEq", "SpiceIC", "SpicePar", "SpiceOptions", "SpiceFunc",
+  paramsHiddenBySim["Export"] = QStringList{"NutmegEq", ".MEAS", "SpiceIC", "SpicePar", "SpiceOptions", "SpiceFunc",
                                             "SpiceCSPar", "SpGlobPar", "SpiceNodeset"};
   paramsHiddenBySim["Sim"] = QStringList{".AC", ".DISTO", ".SP", ".NOISE", ".TR", "Eqn", "SpiceIC", "SpicePar",
                                          "SpiceOptions", "SpiceFunc", "SpiceCSPar", "SpGlobPar", "SpiceNodeset"};
@@ -1251,6 +1251,7 @@ QStringList ComponentDialog::getSimulationList(bool includeGeneric)
         if (c->Model == ".SENS") continue;
         if (c->Model == ".SENS_AC") continue;
         if (c->Model == ".MC") continue;
+        if (c->Model == ".MEAS") continue;
         if (c->Model == ".SW" && !c->Props.at(0)->Value.toUpper().startsWith("DC") ) continue;
         sim_lst.append(c->Name);
     }
