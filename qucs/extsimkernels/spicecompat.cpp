@@ -447,3 +447,22 @@ int spicecompat::strToMsopenModel(const QString &model)
   models<<"Kirschning"<<"Hammerstad"<<"Alexopoulos";
   return models.indexOf(model);
 }
+
+/*!
+ * \brief spicecompat::simulationMatches Check whether a component that refers
+ *        to a simulation (e.g. Nutmeg equation, measurement) applies to it.
+ * \param target Simulation reference set in the component: an exact
+ *        simulation name (e.g. "TR1"), a generic prefix (e.g. "TR") matching
+ *        all simulations of that kind, or "ALL"
+ * \param sim Lowercase name of the simulation being netlisted (e.g. "tr1")
+ * \return true if the component applies to the simulation
+ */
+bool spicecompat::simulationMatches(const QString &target, const QString &sim)
+{
+    static const QRegularExpression sim_rx("^\\w+\\d+");
+    QString used_sim = target.toLower();
+    if (used_sim == "all") return true;
+    if (sim_rx.match(used_sim).hasMatch())
+        return sim == used_sim;
+    return sim.startsWith(used_sim);
+}
