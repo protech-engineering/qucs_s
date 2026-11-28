@@ -556,7 +556,6 @@ void Module::registerModules (void) {
       REGISTER_SIMULATION_1 (Optimize_Sim);
   //if (QucsSettings.DefaultSimulator != spicecompat::simQucsator) {
       REGISTER_SIMULATION_1 (SpiceFourier);
-      REGISTER_SIMULATION_1 (SpiceMeas);
       REGISTER_SIMULATION_1 (SpiceNoise);
   //}
   //if (QucsSettings.DefaultSimulator == spicecompat::simNgspice || QucsSettings.DefaultSimulator == spicecompat::simSpiceOpus) {
@@ -587,6 +586,7 @@ void Module::registerModules (void) {
 
   // equations
   REGISTER_EQUATION_1 (NutmegEquation);
+  REGISTER_EQUATION_1 (SpiceMeas);
   REGISTER_EQUATION_1 (SpiceParam);
   REGISTER_EQUATION_1 (SpiceCSParam);
   REGISTER_EQUATION_1 (SpiceGlobalParam);
@@ -619,6 +619,7 @@ void Module::registerModules (void) {
       REGISTER_SPICE_SEC_1 (SpiceIC);
       REGISTER_SPICE_SEC_1 (SpiceNodeset);
       REGISTER_SPICE_SEC_1 (NutmegEquation);
+      REGISTER_SPICE_SEC_1 (SpiceMeas);
       REGISTER_SPICE_SEC_1 (S4Q_Model);
       REGISTER_SPICE_SEC_1 (S4Q_Include);
       REGISTER_SPICE_SEC_1 (S4Q_Lib);

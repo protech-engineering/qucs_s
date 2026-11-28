@@ -15,7 +15,7 @@
 #ifndef SP_MEAS_H
 #define SP_MEAS_H
 
-#include "components/simulation.h"
+#include "components/component.h"
 
 /*!
  * \brief Ngspice measurements (the `meas` control command) on the results
@@ -27,7 +27,7 @@
  * Results are stored in the dataset as scalars, or as vectors over the swept
  * parameter if the simulation is inside a parameter sweep.
  */
-class SpiceMeas : public qucs::component::SimulationComponent {
+class SpiceMeas : public Component {
 public:
   SpiceMeas();
   ~SpiceMeas() override = default;
@@ -48,8 +48,9 @@ public:
   static QString analysisType(const QString& simModel);
 
 protected:
-  QString spice_netlist(spicecompat::SpiceDialect) override { return QString(); }
-  Qt::GlobalColor color() const override { return Qt::darkGreen; }
+  QString vhdlCode(int) override { return QString(); }
+  QString verilogCode(int) override { return QString(); }
+  QString netlist() override { return QString(); }
 };
 
 #endif

@@ -12,14 +12,38 @@
  *                                                                         *
  ***************************************************************************/
 #include "sp_meas.h"
+#include "main.h"
+
+#include <QFontInfo>
+#include <QFontMetrics>
 #include "extsimkernels/spicecompat.h"
 
 SpiceMeas::SpiceMeas()
 {
-  isSimulation = true;
+  // Looks and behaves like a Nutmeg equation block
+  isEquation = true;
+  Type = isComponent;
   Description = QObject::tr("Measurements");
   Simulator = spicecompat::simNgspice;
-  initSymbol(Description);
+
+  QFont f = QucsSettings.font;
+  f.setWeight(QFont::Light);
+  f.setPointSizeF(12.0);
+  QFontMetrics metrics(f, 0);  // use the the screen-compatible metric
+  QSize r = metrics.size(0, QObject::tr("Meas"));
+  int xb = r.width()  >> 1;
+  int yb = r.height() >> 1;
+
+  Lines.append(new qucs::Line(-xb, -yb, -xb,  yb, QPen(Qt::darkGreen, 2)));
+  Lines.append(new qucs::Line(-xb,  yb,  xb+3, yb, QPen(Qt::darkGreen, 2)));
+  Texts.append(new Text(-xb+4, -yb-3, QObject::tr("Meas"),
+                        QColor(0,0,0), QFontInfo(f).pixelSize()));
+
+  x1 = -xb-3;  y1 = -yb-5;
+  x2 =  xb+9;  y2 =  yb+3;
+
+  tx = x1+4;
+  ty = y2+4;
   Model = ".MEAS";
   Name  = "MEAS";
   SpiceModel = ".MEAS";
