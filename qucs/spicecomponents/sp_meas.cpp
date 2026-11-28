@@ -51,6 +51,8 @@ QString SpiceMeas::analysisType(const QString& simModel)
   if (simModel == ".TR") return "tran";
   if (simModel == ".AC") return "ac";
   if (simModel == ".SP") return "sp";
+  // Netlisted as an analysis only when it sweeps a DC simulation (dc command)
+  if (simModel == ".SW") return "dc";
   return QString();
 }
 
